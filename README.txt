@@ -14,5 +14,5 @@ MicroSD Card Module:
 	Purchase site: https://www.amazon.ca/dp/B0793H4GPC/ref=pe_2480960_170170910_tnp_emaildp_1
 	Useful link: http://www.vishnumaiea.in/projects/hardware/interfacing-catalex-micro-sd-card-module
 
-Linear Voltage Regulator:
+Linear Voltage Regulator: L7805CV (TO-220 Package)
 	Specs: http://www.alldatasheet.com/datasheet-pdf/pdf/22634/STMICROELECTRONICS/L7805CV.html
