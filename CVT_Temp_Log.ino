@@ -3,136 +3,126 @@
 #include <SPI.h>
 #include <SD.h>
 
-int n=1;
-unsigned long time;
-File TempFile;
-File ExcelTemp;
-// Data wire is plugged into pin 2 on the Arduino
-#define ONE_WIRE_BUS 2
-const int chipSelect = 8;
- 
-// Setup a oneWire instance to communicate with any OneWire devices 
-// (not just Maxim/Dallas temperature ICs)
+#define ONE_WIRE_BUS 2 //Temperature sensor wired to pin 2
+File myFile;
+
+int counter =0; //Number of times temperature was read. Used with RunTime
+int tempVal; //Temporary variable to track switch previous state
+double RunTime; //Simulated clock
+String printString;
+
 OneWire oneWire(ONE_WIRE_BUS);
- 
-// Pass our oneWire reference to Dallas Temperature.
 DallasTemperature sensors(&oneWire);
- 
-void setup(void)
-{
-  // start serial port
+
+void setup() {
+  // Open serial communications and wait for port to open:
   Serial.begin(9600);
-  Serial.println("Dallas Temperature IC Control Library Demo");
+  while (!Serial) {
+    ; // wait for serial port to connect. Needed for native USB port only
+  }
+  
+sensors.begin(); //Open communication with temperature sensor
 
-  // Start up the library
-  sensors.begin();
+//Below are statements to simulate a switch using only a wire
+pinMode(3,OUTPUT);
+pinMode(5,INPUT);
+digitalWrite(3,HIGH);
+digitalWrite(5,LOW);
+tempVal=0;
+//End of switch simulation
 
+  Serial.println();
+  Serial.println("Dallas Temperature IC Control Library");
+  Serial.println("OneWire Library");
   Serial.print("Initializing SD card...");
-  // make sure that the default chip select pin is set to
-  // output, even if you don't use it:
-  pinMode(10, OUTPUT);
 
-  // The chipSelect pin you use should also be set to output
-  pinMode(chipSelect, OUTPUT);
-
-  // see if the card is present and can be initialized:
-  if (!SD.begin(chipSelect)) {
-    Serial.println("Card failed, or not present");
-    // don't do anything more:
+//Check to see if SD Card is wired properly
+  if (!SD.begin(10)) {
+    Serial.println("initialization failed!");
     return;
   }
-  Serial.println("card initialized.");
-}
+  Serial.println("initialization done.");
 
-void loop(void)
-{
-  time = millis();
+  // Create txt file to write to and open it
+  // If file already exists, open it and code will append
+  myFile = SD.open("TEMP_LOG.txt", FILE_WRITE);
 
-String a = Serial.readString();
-if (a=="end"){
-  Serial.println(a);
-  Serial.end();
-  TempFile.close();
-    int n=1;
-  while(1){};//Never ending loop.... it will not leave/ "Stopping"
-}
-else{
-  while (n<2){
-    TempFile = SD.open("TEMP_LOG.txt", FILE_WRITE);
-if (SD.exists("TEMP_LOG.txt")) {
+  // If the file opened, write to it:
+  if (myFile) {
+    //Write to serial monitor
+    Serial.println("NEW RUN");
+    //Write to txt file
+    myFile.println("NEW RUN");
+    // close the file:
+    myFile.close();
+    //Print to serial monitor
+    Serial.println("File Closed");
+    Serial.println("Waiting for Hardware Connection...");
   } else {
-    Serial.println("TEMO_LOG.txt doesn't exist.");
+    // If the file didn't open, print an error to serial monitor
+    Serial.println("Error Opening TEMP_LOG.txt");
   }
-  // if the file is available, write to it:
-  if (TempFile) {
-    TempFile.println("NEW RUN");
-      TempFile.close();
-  }
-  /*  sensors.requestTemperatures(); // Send the command to get temperatures
-    Serial.print("TEMPERATURE: ");
-  Serial.print(sensors.getTempCByIndex(0)); // Why "byIndex"? 
-  Serial.print(" C");
-
-  Serial.print("\t TIME: ");
-  Serial.print(time/1000);
-  Serial.println(" Seconds");
-
-  String dataString = "";
-    dataString += String(sensors.getTempCByIndex(0));
-    
-TempFile = SD.open("TEMP_LOG.txt", FILE_WRITE);
-if (SD.exists("TEMP_LOG.txt")) {
-  } else {
-    Serial.println("TEMO_LOG.txt doesn't exist.");
-  }
-  // if the file is available, write to it:
-  if (TempFile) {
-    TempFile.println("TEMPERATURE: "+dataString+"\t"+"TIME: "+time/1000+" Seconds");
-    TempFile.close();
-    // print to the serial port too:
-  }
-  // if the file isn't open, pop up an error:
-  else {
-    Serial.println("error opening TEMP_LOG.txt");
-  }*/
-  n++;
-  }
- 
-  // call sensors.requestTemperatures() to issue a global temperature
-  // request to all devices on the bus
-  //Serial.print(" Requesting temperature...");
-  sensors.requestTemperatures(); // Send the command to get temperatures
-  //Serial.println("DONE");
-
-  Serial.print("TEMPERATURE: ");
-  Serial.print(sensors.getTempCByIndex(0)); // Why "byIndex"? 
-  Serial.print(" C");
-
-  Serial.print("\t TIME: ");
-  Serial.print(time/1000);
-  Serial.println(" Seconds");
-    // You can have more than one IC on the same bus. 
-    // 0 refers to the first IC on the wire
-
-   String dataString = "";
-    dataString += String(sensors.getTempCByIndex(0));
-    
-TempFile = SD.open("TEMP_LOG.txt", FILE_WRITE);
-if (SD.exists("TEMP_LOG.txt")) {
-  } else {
-    Serial.println("TEMO_LOG.txt doesn't exist.");
-  }
-  // if the file is available, write to it:
-  if (TempFile) {
-    //TempFile.println("TEMPERATURE\t"+dataString+"\t"+"TIME\t"+time/1000+"\tSeconds");
-    TempFile.println(dataString+"\t"+time/1000);
-    TempFile.close();
-    // print to the serial port too:
-  }
-  // if the file isn't open, pop up an error:
-  else {
-    Serial.println("error opening TEMP_LOG.txt");
-  }
-delay(500);
 }
+void loop() {
+  
+  if (digitalRead(5)==LOW && tempVal==0)
+  {
+  //Wire from pin 3 is not plugged into pin 5 - simulating the switch is off
+  //If switch is off, don't start logging temperature. 
+  //Do nothing here until switch is turned on (wire from pin 3 plugged into pin 5)
+  }
+
+  else if (digitalRead(5)==HIGH) 
+   {
+   //Creating simulated clock by multiplying delay time with counter (loop number)
+   //This shows only the time that the temperature sensor is tracking and displaying temperature data
+   RunTime = 500*counter;
+   //Pin 3 is now plugged into pin 5, set switch temp state to true
+   tempVal=1;
+   //Request temperature value from temperature sensor 
+   sensors.requestTemperatures();
+   
+   //Serial.println(tempVal);                     USED FOR TESTING
+   
+   //Open the txt file and be ready to write
+   myFile = SD.open("TEMP_LOG.txt", FILE_WRITE);
+   
+   //myFile.println("File Open");                 USED FOR TESTING
+   //Serial.println("File Open");                 USED FOR TESTING
+   //myFile.println("Test "+String(counter));     USED FOR TESTING
+   //Serial.println("Test"+String(counter));      USED FOR TESTING
+
+   //Create string of temperature reading and time seperated by a tab
+   printString=(String(sensors.getTempCByIndex(0))+"\t"+RunTime/1000);
+   //Print the combined string to serial monitor
+   Serial.println(printString);
+   //Print the combined string to txt file
+   myFile.println(printString);
+
+   //Serial.print(sensors.getTempCByIndex(0));    USED FOR TESTING
+   //Serial.print(time/1000);                     USED FOR TESTING
+   //myFile.print(sensors.getTempCByIndex(0));    USED FOR TESTING
+   //Serial.print(time/1000);                     USED FOR TESTING
+   //myFile.println("File Closed");               USED FOR TESTING
+   //Serial.println("File Closed");               USED FOR TESTING
+
+   //Close the txt file
+   myFile.close();
+   //Increase counter
+   counter++;
+  }
+
+  //If the switch was on and is now off, close the file and stay in this loop forever until arduino is reset
+  else if (digitalRead(5)==LOW && tempVal==1) 
+  {
+    //Print to serial monitor
+    Serial.println("Disconnected");
+    Serial.println("File Closed");
+    myFile.close();
+    while(1){};
+  }
+  
+  delay(500);
 }
+
+
