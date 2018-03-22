@@ -1,3 +1,19 @@
+/*
+ * Code created for Baja Group 2 - Design Studio MCG 4149
+ * Date: March 21 2018
+ * Members: Conor Turner & Kyle Macmillan
+ * 
+ * Written by Kyle Macmillan
+ */
+
+////////////////////////////////////////////////////////////////////////////////
+ 
+/*
+ * When using bluetooth, set port to COMM 4, open serial monitor, 
+ * wait for HC-06 lights to turn solid and press reset on Arduino to begin code.
+ */
+
+
 #include <OneWire.h>
 #include <DallasTemperature.h>
 #include <SPI.h>
