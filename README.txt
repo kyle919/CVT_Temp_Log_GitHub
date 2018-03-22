@@ -1,3 +1,8 @@
+Arduino:
+	Specs: Pro Mini 328 - 3.3V/8MHz
+	Purchase site: https://www.sparkfun.com/products/11114
+	Useful link: See file Arduino_Pro_Mini_PinOUTS in Repository
+
 Temperature Sensor: 
 	Specs:One-Wire Ambient Temperature Sensor - MAX31820
 	Purchase site: https://www.sparkfun.com/products/14049
