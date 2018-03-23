@@ -3,7 +3,6 @@
  * Date: March 21 2018
  * Members: Conor Turner & Kyle Macmillan
  * 
- * Written by Kyle Macmillan
  */
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -24,8 +23,9 @@ File myFile;
 
 int counter =0; //Number of times temperature was read. Used with RunTime
 int tempVal; //Temporary variable to track switch previous state
+boolean printCounter = true; //Used to print a statement only on first loop of temp logging
 double RunTime; //Simulated clock
-String printString;
+String printString; //String that is being printed to serial monitor and txt file
 
 OneWire oneWire(ONE_WIRE_BUS);
 DallasTemperature sensors(&oneWire);
@@ -90,6 +90,14 @@ void loop() {
 
   else if (digitalRead(5)==HIGH) 
    {
+    //Print one line to serial monitor to confirm that data logging has started
+    //Only want this statement to be printed in the first loop of logging
+    do {
+      Serial.print("Temperature Logging Started");
+      printCounter = false;
+    } while (printCounter = true);
+    //Statement printed once, now don't print again unless Arduino is reset
+    
    //Creating simulated clock by multiplying delay time with counter (loop number)
    //This shows only the time that the temperature sensor is tracking and displaying temperature data
    RunTime = 500*counter;
