@@ -93,7 +93,8 @@ void loop() {
     //Print one line to serial monitor to confirm that data logging has started
     //Only want this statement to be printed in the first loop of logging
     do {
-      Serial.print("Temperature Logging Started");
+      Serial.println("Hardware Connection Made!");
+      Serial.println("Temperature Logging Started");
       printCounter = false;
     } while (printCounter = true);
     //Statement printed once, now don't print again unless Arduino is reset
