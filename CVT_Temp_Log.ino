@@ -92,12 +92,12 @@ void loop() {
    {
     //Print one line to serial monitor to confirm that data logging has started
     //Only want this statement to be printed in the first loop of logging
-    do {
+    if (printCounter==true){
       Serial.println("Hardware Connection Made!");
       Serial.println("Temperature Logging Started");
-      printCounter = false;
-    } while (printCounter = true);
+    }
     //Statement printed once, now don't print again unless Arduino is reset
+    printCounter=false; 
     
    //Creating simulated clock by multiplying delay time with counter (loop number)
    //This shows only the time that the temperature sensor is tracking and displaying temperature data
