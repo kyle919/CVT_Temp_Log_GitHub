@@ -5,7 +5,6 @@ Set FSO = New Scripting.FileSystemObject
 
 Dim FOL As Scripting.Folder
 Set FOL = FSO.GetFolder("D:\Documents\School\TempLog")
-
 R = 1
 Dim MYFILE As Scripting.File
 Dim MYTEXTFILE As Scripting.TextStream
@@ -46,7 +45,8 @@ Sheet9.Cells.Clear
 
 For Each MYFILE In FOL.Files
     'MsgBox MYFILE.Name
-    Set MYTEXTFILE = FSO.OpenTextFile(FOL & "\" & MYFILE.Name)
+    Set MYTEXTFILE = FSO.OpenTextFile("F:\TEMP_LOG.txt")
+    'Set MYTEXTFILE = FSO.OpenTextFile(FOL & "\" & MYFILE.Name)
     Do While Not MYTEXTFILE.AtEndOfStream
         Cells(R, 1).Value = MYTEXTFILE.ReadLine
         R = R + 1
@@ -207,3 +207,5 @@ For i = 1 To cellCount
 Next
 MsgBox "Done!"
 End Sub
+
+
