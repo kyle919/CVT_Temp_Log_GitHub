@@ -20,6 +20,14 @@ Dim Array5() As Variant
 Dim Array6() As Variant
 Dim Array7() As Variant
 Dim Array8() As Variant
+Dim TimeArray1() As Variant
+Dim TimeArray2() As Variant
+Dim TimeArray3() As Variant
+Dim TimeArray4() As Variant
+Dim TimeArray5() As Variant
+Dim TimeArray6() As Variant
+Dim TimeArray7() As Variant
+Dim TimeArray8() As Variant
 
 DataCounter = 0
 DataStream = True
@@ -46,6 +54,12 @@ For Each MYFILE In FOL.Files
 MYTEXTFILE.Close
 Next
 
+    Columns("A:A").Select
+    Selection.TextToColumns Destination:=Range("A1"), DataType:=xlDelimited, _
+        TextQualifier:=xlDoubleQuote, ConsecutiveDelimiter:=False, Tab:=True, _
+        Semicolon:=False, Comma:=False, Space:=False, Other:=False, FieldInfo _
+        :=Array(Array(1, 1), Array(2, 1)), TrailingMinusNumbers:=True
+
 cellCount = Worksheets("Sheet1").Cells(Rows.Count, 1).End(xlUp).Row
 For i = 1 To cellCount
     If Worksheets("Sheet1").Cells(i, 1).Value = "NEW RUN" Then
@@ -55,8 +69,14 @@ For i = 1 To cellCount
         For c = 2 To cellCount
             If (Worksheets("Sheet1").Cells(c, 1).Value <> "NEW RUN" And DataStream = True) Then
                 ReDim Preserve Array1(c)
+                ReDim Preserve TimeArray1(c)
+                
                 Array1(c) = Cells(c, 1).Value
                 Worksheets("Sheet2").Cells(c - 1, 1).Value = Array1(c)
+                
+                TimeArray1(c) = Cells(c, 2).Value
+                Worksheets("Sheet2").Cells(c - 1, 2).Value = TimeArray1(c)
+                
                 Innercounter = Innercounter + 1
             Else: DataStream = False
             End If
@@ -68,8 +88,13 @@ For i = 1 To cellCount
         For c = Start2 To cellCount
             If (Worksheets("Sheet1").Cells(c, 1).Value <> "NEW RUN" And DataStream = True) Then
                 ReDim Preserve Array2(c)
+                ReDim Preserve TimeArray2(c)
+                
                 Array2(c) = Cells(c, 1).Value
                 Worksheets("Sheet3").Cells(c - (Start2 - 1), 1).Value = Array2(c)
+                
+                TimeArray2(c) = Cells(c, 2).Value
+                Worksheets("Sheet3").Cells(c - (Start2 - 1), 2).Value = TimeArray2(c)
             Else: DataStream = False
             End If
         Next
@@ -80,8 +105,13 @@ For i = 1 To cellCount
         For c = Start3 To cellCount
             If (Worksheets("Sheet1").Cells(c, 1).Value <> "NEW RUN" And DataStream = True) Then
                 ReDim Preserve Array3(c)
+                ReDim Preserve TimeArray3(c)
+                
                 Array3(c) = Cells(c, 1).Value
                 Worksheets("Sheet4").Cells((c - (Start3 - 1)), 1).Value = Array3(c)
+                
+                TimeArray3(c) = Cells(c, 2).Value
+                Worksheets("Sheet4").Cells((c - (Start3 - 1)), 2).Value = TimeArray3(c)
             Else: DataStream = False
             End If
         Next
@@ -92,8 +122,13 @@ For i = 1 To cellCount
         For c = Start4 To cellCount
             If (Worksheets("Sheet1").Cells(c, 1).Value <> "NEW RUN" And DataStream = True) Then
                 ReDim Preserve Array4(c)
+                ReDim Preserve TimeArray4(c)
+                
                 Array4(c) = Cells(c, 1).Value
                 Worksheets("Sheet5").Cells((c - (Start4 - 1)), 1).Value = Array4(c)
+                
+                TimeArray4(c) = Cells(c, 2).Value
+                Worksheets("Sheet5").Cells((c - (Start4 - 1)), 2).Value = TimeArray4(c)
             Else: DataStream = False
             End If
         Next
@@ -104,8 +139,13 @@ For i = 1 To cellCount
         For c = Start5 To cellCount
             If (Worksheets("Sheet1").Cells(c, 1).Value <> "NEW RUN" And DataStream = True) Then
                 ReDim Preserve Array5(c)
+                ReDim Preserve TimeArray5(c)
+                
                 Array5(c) = Cells(c, 1).Value
                 Worksheets("Sheet6").Cells((c - (Start5 - 1)), 1).Value = Array5(c)
+                
+                TimeArray5(c) = Cells(c, 2).Value
+                Worksheets("Sheet6").Cells((c - (Start5 - 1)), 2).Value = TimeArray5(c)
             Else: DataStream = False
             End If
         Next
@@ -116,8 +156,13 @@ For i = 1 To cellCount
         For c = Start6 To cellCount
             If (Worksheets("Sheet1").Cells(c, 1).Value <> "NEW RUN" And DataStream = True) Then
                 ReDim Preserve Array6(c)
+                ReDim Preserve TimeArray6(c)
+                
                 Array6(c) = Cells(c, 1).Value
                 Worksheets("Sheet7").Cells((c - (Start6 - 1)), 1).Value = Array6(c)
+                
+                TimeArray6(c) = Cells(c, 2).Value
+                Worksheets("Sheet7").Cells((c - (Start6 - 1)), 2).Value = TimeArray6(c)
             Else: DataStream = False
             End If
         Next
@@ -128,8 +173,13 @@ For i = 1 To cellCount
         For c = Start7 To cellCount
             If (Worksheets("Sheet1").Cells(c, 1).Value <> "NEW RUN" And DataStream = True) Then
                 ReDim Preserve Array7(c)
+                ReDim Preserve TimeArray7(c)
+                
                 Array7(c) = Cells(c, 1).Value
                 Worksheets("Sheet8").Cells((c - (Start7 - 1)), 1).Value = Array7(c)
+                
+                TimeArray7(c) = Cells(c, 2).Value
+                Worksheets("Sheet8").Cells((c - (Start7 - 1)), 2).Value = TimeArray7(c)
             Else: DataStream = False
             End If
         Next
@@ -140,8 +190,13 @@ For i = 1 To cellCount
         For c = Start8 To cellCount
             If (Worksheets("Sheet1").Cells(c, 1).Value <> "NEW RUN" And DataStream = True) Then
                 ReDim Preserve Array8(c)
+                ReDim Preserve TimeArray8(c)
+                
                 Array8(c) = Cells(c, 1).Value
                 Worksheets("Sheet9").Cells((c - (Start8 - 1)), 1).Value = Array8(c)
+                
+                TimeArray8(c) = Cells(c, 2).Value
+                Worksheets("Sheet9").Cells((c - (Start8 - 1)), 2).Value = TimeArray8(c)
             Else: DataStream = False
             End If
         Next
@@ -150,8 +205,5 @@ For i = 1 To cellCount
     
     End If
 Next
-MsgBox UBound(Array1)
-MsgBox DataCounter
-MsgBox Innercounter
-    
+MsgBox "Done!"
 End Sub
