@@ -41,9 +41,9 @@ sensors.begin(); //Open communication with temperature sensor
 
 //Below are statements to simulate a switch using only a wire
 pinMode(3,OUTPUT);
-pinMode(5,INPUT);
+pinMode(7,INPUT);
 digitalWrite(3,HIGH);
-digitalWrite(5,LOW);
+digitalWrite(7,LOW);
 tempVal=0;
 //End of switch simulation
 
@@ -81,14 +81,14 @@ tempVal=0;
 }
 void loop() {
   
-  if (digitalRead(5)==LOW && tempVal==0)
+  if (digitalRead(7)==LOW && tempVal==0)
   {
-  //Wire from pin 3 is not plugged into pin 5 - simulating the switch is off
+  //Wire from pin 3 is not plugged into pin 7 - simulating the switch is off
   //If switch is off, don't start logging temperature. 
-  //Do nothing here until switch is turned on (wire from pin 3 plugged into pin 5)
+  //Do nothing here until switch is turned on (wire from pin 3 plugged into pin 7)
   }
 
-  else if (digitalRead(5)==HIGH) 
+  else if (digitalRead(7)==HIGH) 
    {
     //Print one line to serial monitor to confirm that data logging has started
     //Only want this statement to be printed in the first loop of logging
@@ -102,7 +102,7 @@ void loop() {
    //Creating simulated clock by multiplying delay time with counter (loop number)
    //This shows only the time that the temperature sensor is tracking and displaying temperature data
    RunTime = 500*counter;
-   //Pin 3 is now plugged into pin 5, set switch temp state to true
+   //Pin 3 is now plugged into pin 7, set switch temp state to true
    tempVal=1;
    //Request temperature value from temperature sensor 
    sensors.requestTemperatures();
@@ -138,7 +138,7 @@ void loop() {
   }
 
   //If the switch was on and is now off, close the file and stay in this loop forever until arduino is reset
-  else if (digitalRead(5)==LOW && tempVal==1) 
+  else if (digitalRead(7)==LOW && tempVal==1) 
   {
     //Print to serial monitor
     Serial.println("Disconnected");
