@@ -2,8 +2,9 @@ Sub IMPORT_DATA()
 Dim FSO As Scripting.FileSystemObject
 Set FSO = New Scripting.FileSystemObject
 
-
+'Folder should be where Temp_Log is saved on SD Card
 Dim FOL As Scripting.Folder
+'File location must be updated depending on users computer
 Set FOL = FSO.GetFolder("D:\Documents\School\TempLog")
 R = 1
 Dim MYFILE As Scripting.File
@@ -33,6 +34,7 @@ DataStream = True
 Innercounter = 1
 Counter2 = 1
 
+'Clear every cell in every sheet
 Sheet1.Cells.Clear
 Sheet2.Cells.Clear
 Sheet3.Cells.Clear
@@ -53,7 +55,7 @@ For Each MYFILE In FOL.Files
     Loop
 MYTEXTFILE.Close
 Next
-
+'This creates 2 columns from the text file by seperating the values using a tab
     Columns("A:A").Select
     Selection.TextToColumns Destination:=Range("A1"), DataType:=xlDelimited, _
         TextQualifier:=xlDoubleQuote, ConsecutiveDelimiter:=False, Tab:=True, _
@@ -62,11 +64,13 @@ Next
 
 cellCount = Worksheets("Sheet1").Cells(Rows.Count, 1).End(xlUp).Row
 For i = 1 To cellCount
+'If the it has seen "NEW RUN" once then import the values into the sheet
     If Worksheets("Sheet1").Cells(i, 1).Value = "NEW RUN" Then
     DataCounter = DataCounter + 1
     Select Case DataCounter
     Case 1
         For c = 2 To cellCount
+        'If it has not seen another "NEW RUN" entry indicating that the trial is ended, it will read in the next value form the text file to Excel
             If (Worksheets("Sheet1").Cells(c, 1).Value <> "NEW RUN" And DataStream = True) Then
                 ReDim Preserve Array1(c)
                 ReDim Preserve TimeArray1(c)
@@ -78,10 +82,11 @@ For i = 1 To cellCount
                 Worksheets("Sheet2").Cells(c - 1, 2).Value = TimeArray1(c)
                 
                 Innercounter = Innercounter + 1
+        'If it does read "NEW RUN", then stop reading data and check to see if a new sheet is needed
             Else: DataStream = False
             End If
         Next
-        
+    'This process repeats up to 8 times
     Case 2
         DataStream = True
         Start2 = UBound(Array1) + 2
@@ -207,5 +212,3 @@ For i = 1 To cellCount
 Next
 MsgBox "Done!"
 End Sub
-
-
